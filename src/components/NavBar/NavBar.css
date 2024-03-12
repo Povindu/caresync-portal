@@ -1,0 +1,22 @@
+.NavList{
+    list-style: none;
+    border: 1px solid black;
+    height: 50px;
+    margin: 0;
+    position: absolute;
+    right: 0;
+}
+
+.NavList-Item{
+    display: inline-block;
+    border: 1px solid black;
+    height: 50px;
+    padding: 0px 10px;
+    /* float:right; */
+}
+
+.NavBar-container{
+    height: 50px;
+    width: 100vw;
+    border: 1px solid red;
+}
