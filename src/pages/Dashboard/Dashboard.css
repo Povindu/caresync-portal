@@ -1,0 +1,15 @@
+.CardContainer{
+    display:flex;
+    flex-direction: row;
+    gap: 20px
+    /* flex:inline-block; */
+}
+
+.card{
+    border: 1px solid red;
+}
+
+.piechart{
+    margin: 100px 0px 0px 200px ;
+    width: 400px;
+}
