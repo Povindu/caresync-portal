@@ -2,13 +2,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 
 // pages & components
-
 import Users from "./pages/Users/Users";
 import Drawer from "./pages/Drawer/Drawer";
 import ViewDoctors from "./pages/ViewDoctors/ViewDoctors";
 import ViewPatients from "./components/ViewPatients/ViewPatients";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import Logout from "./components/Logout";
+import AuthLandingPage from "./pages/AuthLandingPage/AuthLandingPage";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
 import "./App.css";
@@ -19,25 +20,47 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <NavBar/> */}
-        <Drawer
-          Inp={
-            <div className="pages">
-              <Routes>
-                {/* <Route path="/" element={<Dashboard />} /> */}
-                <Route
-                  path="/"
-                  element={user ? <h1>test <br/> test test <br/> testtest <br/> testtest <br/> test</h1> : <Navigate to="/login" />}
-                />
-                <Route path="/doctors" element={<Users type={"doctors"} />} />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/signup" element={<Signup/>} />
-                <Route path="/patients" element={<ViewPatients />} />
-                <Route path="/users" element={<ViewDoctors />} />
-              </Routes>
-            </div>
-          }
-        />
+        {user ? (
+          <Drawer
+            Inp={
+              <div className="pages">
+                <Routes>
+                  {user ? (
+                    <>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/patients" element={<ViewPatients />} />
+                      <Route
+                        path="/doctors"
+                        element={<Users type={"doctors"} />}
+                      />
+                      <Route path="/users" element={<ViewDoctors />} />
+                    </>
+                  ) : (
+                    <>
+                      <Route path="/" element={<Navigate to="/login" />} />
+                      <Route
+                        path="/patients"
+                        element={<Navigate to="/login" />}
+                      />
+                      <Route
+                        path="/doctors"
+                        element={<Navigate to="/login" />}
+                      />
+                      <Route path="/users" element={<Navigate to="/login" />} />
+                    </>
+                  )}
+
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/logout" element={<Logout />} />
+                  <Route path="/signup" element={<Signup />} />
+                  
+                </Routes>
+              </div>
+            }
+          />
+        ) : (
+          <AuthLandingPage />
+        )}
       </BrowserRouter>
     </div>
   );
