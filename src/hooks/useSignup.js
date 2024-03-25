@@ -15,23 +15,22 @@ export const useSignup = () => {
   const { dispatch } = useAuthContext();
 
   const SignupFunc = async (name, email, pass) => {
-    try {
-      const configurationObject = {
-        method: "post",
-        url: `${baseUrl}/portal/auth/signup`,
-        data: {
-          name: name,
-          email: email,
-          password: pass,
-        },
-      };
-      console.log(configurationObject.url);
-      const res = await axios(configurationObject);
-      return res;
-    } catch (error) {
-      setIsLoading(false);
-      console.log("error " + error);
-    }
+    axios
+      .post(`${baseUrl}/portal/auth/signup`, {
+        name: name,
+        email: email,
+        password: pass,
+      })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setError(error.response.data.error)
+        console.log(error.response.data.error);
+        return error.response.data.error;
+      });
   };
 
   const signup = async (name, email, password) => {
@@ -39,6 +38,7 @@ export const useSignup = () => {
     setError(null);
 
     const response = await SignupFunc(name, email, password);
+    console.log(response);
 
     if (response) {
       if (!response.status == 200) {
@@ -46,8 +46,8 @@ export const useSignup = () => {
         setError(response.error);
       }
       if (response.status == 200) {
-        alert("Signup Complete!")
-        
+        alert("Signup Complete!");
+
         navigate("/login");
 
         // update loading state
