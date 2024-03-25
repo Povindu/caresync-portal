@@ -1,35 +1,58 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const baseUrl = "http://localhost:4000/api";
 
 export const useSignup = () => {
+  const navigate = useNavigate();
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email, password) => {
+  const SignupFunc = async (name, email, pass) => {
+    try {
+      const configurationObject = {
+        method: "post",
+        url: `${baseUrl}/portal/auth/signup`,
+        data: {
+          name: name,
+          email: email,
+          password: pass,
+        },
+      };
+      console.log(configurationObject.url);
+      const res = await axios(configurationObject);
+      return res;
+    } catch (error) {
+      setIsLoading(false);
+      console.log("error " + error);
+    }
+  };
+
+  const signup = async (name, email, password) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch("/api/user/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const json = await response.json();
+    const response = await SignupFunc(name, email, password);
 
-    if (!response.ok) {
-      setIsLoading(false);
-      setError(json.error);
-    }
-    if (response.ok) {
-      // save the user to local storage
-      localStorage.setItem("user", JSON.stringify(json));
+    if (response) {
+      if (!response.status == 200) {
+        setIsLoading(false);
+        setError(response.error);
+      }
+      if (response.status == 200) {
+        alert("Signup Complete!")
+        
+        navigate("/login");
 
-      // update the auth context
-      dispatch({ type: "LOGIN", payload: json });
-
-      // update loading state
-      setIsLoading(false);
+        // update loading state
+        setIsLoading(false);
+      }
     }
   };
 
