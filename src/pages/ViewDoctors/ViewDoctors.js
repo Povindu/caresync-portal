@@ -14,7 +14,10 @@ import { format, isDate } from "date-fns";
 
 import axios from "axios";
 
-const baseUrl = "http://localhost:4000/api";
+import { baseUrl } from "../../constants/constants";
+
+
+
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -46,24 +49,6 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [userData, setUserData] = React.useState();
-
-  // const dateStr = "2021-10-26T12:24:33.433+00:00";
-  // const str = formatDistance(new Date(dateStr), new Date());
-
-  const formatDate = (date) => {
-    // const dateStr = "2021-10-26T12:24:33.433+00:00";
-    // const dateStr = Date.parse(date);
-    // date = date + "00:00"
-    return date
-    // if (isDate(date)) {
-    //   const str = formatDistance(new Date(date), new Date());
-    //   return str;
-    // }
-    // else{
-    //   return "fee"
-    // }
-    
-  };
 
   React.useEffect(() => {
     setUserData();

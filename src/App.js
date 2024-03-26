@@ -29,10 +29,6 @@ function App() {
                     <>
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/patients" element={<ViewPatients />} />
-                      {/* <Route
-                        path="/doctors"
-                        element={<Users type={"doctors"} />}
-                      /> */}
                       <Route path="/doctors" element={<ViewDoctors />} />
                     </>
                   ) : (
@@ -46,7 +42,6 @@ function App() {
                         path="/doctors"
                         element={<Navigate to="/login" />}
                       />
-                      <Route path="/users" element={<Navigate to="/login" />} />
                     </>
                   )}
 

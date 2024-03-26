@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 
 import axios from "axios";
 
-const baseUrl = "http://localhost:4000/api";
+import { baseUrl } from "../../constants/constants";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
