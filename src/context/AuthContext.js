@@ -15,9 +15,6 @@ export const authReducer = (state, action) => {
 };
 
 export const AuthContextProvider = ({ children }) => {
-  
-  const [JWTDecode, setJWTDecode] = useState();
-
 
   const [state, dispatch] = useReducer(authReducer, {
     user: null,

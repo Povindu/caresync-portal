@@ -15,17 +15,17 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import axios from "axios";
-import api from "../../services/AuthService";
 
 import { baseUrl } from "../../constants/constants";
+import api from "../../services/AuthService";
 
 const columns = [
   { id: "firstName", label: "First Name", minWidth: 170 },
   { id: "lastName", label: "Last Name", minWidth: 170 },
-  { id: "specialization", label: "Specialization", minWidth: 100 },
+  // { id: "spec", label: "Specialization", minWidth: 100 },
   {
-    id: "medicalId",
-    label: "Doctor ID",
+    id: "nic",
+    label: "NIC Number",
     minWidth: 170,
     align: "left",
   },
@@ -35,16 +35,22 @@ const columns = [
     minWidth: 170,
     align: "left",
   },
-  { id: "ApproveBtn", label: "Apporve", minWidth: 100 },
+  // { id: "ApproveBtn", label: "Apporve", minWidth: 100 },
   { id: "delBtn", label: "Remove", minWidth: 100 },
 ];
 
 export default function StickyHeadTable() {
-  const [open, setOpen] = React.useState(false);
-  const [deleteId, setDeleteId] = React.useState();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [userData, setUserData] = React.useState();
+  const [open, setOpen] = React.useState(false);
+  const [deleteId, setDeleteId] = React.useState();
+
+  React.useEffect(() => {
+    setUserData();
+    getUsers();
+  }, []);
+
 
   const handleClickOpen = (id) => {
     setDeleteId(id);
@@ -59,7 +65,7 @@ export default function StickyHeadTable() {
   const handleDelete = () => {
     console.log(deleteId);
     api
-      .delete(`${baseUrl}/doctors/${deleteId}`, {})
+      .delete(`${baseUrl}/patients/${deleteId}`, {})
       .then((res) => {
         if (res) {
           getUsers();
@@ -73,16 +79,11 @@ export default function StickyHeadTable() {
     setOpen(false);
   };
 
-  React.useEffect(() => {
-    // setUserData();
-    getUsers();
-  }, []);
-
   const getUsers = async () => {
     try {
       const configurationObject = {
         method: "get",
-        url: `${baseUrl}/doctors`,
+        url: `${baseUrl}/patients`,
       };
       console.log(configurationObject.url);
 
@@ -94,19 +95,8 @@ export default function StickyHeadTable() {
     }
   };
 
-  const handleApprove = (id) => {
-    console.log(`${baseUrl}/doctors/verifyDoctor/${id}`);
-    api
-      .patch(`${baseUrl}/doctors/verifyDoctor/${id}`, {})
-      .then((res) => {
-        if (res) {
-          getUsers();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        return error.response;
-      });
+  const handleApprove = (row) => {
+    alert(row);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -150,7 +140,7 @@ export default function StickyHeadTable() {
                               (!row.medicalIdVerify ? (
                                 <Button
                                   onClick={() => {
-                                    handleApprove(row._id);
+                                    handleApprove(row.name);
                                   }}
                                   variant="outlined"
                                   size="small"
@@ -158,12 +148,19 @@ export default function StickyHeadTable() {
                                   Approve
                                 </Button>
                               ) : (
-                                <Button disabled variant="text" size="small">
+                                <Button
+                                  disabled
+                                  onClick={() => {
+                                    handleApprove(row.name);
+                                  }}
+                                  variant="text"
+                                  size="small"
+                                >
                                   Approved
                                 </Button>
                               ))}
 
-                            {column.id === "delBtn" && (
+{column.id === "delBtn" && (
                               <>
                                 <Button
                                   variant="outlined"
@@ -204,6 +201,7 @@ export default function StickyHeadTable() {
                             )}
                             {column.id !== "ApproveBtn" &&
                               column.id !== "delBtn" &&
+                              // column.id !== "createdAt" &&
                               value}
                           </TableCell>
                         );

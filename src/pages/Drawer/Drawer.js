@@ -1,14 +1,13 @@
 import * as React from "react";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Grid from "@mui/material/Grid";
-
 import { blue } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
-
 import IconButton from "@mui/material/IconButton";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -16,7 +15,8 @@ import MedicationIcon from "@mui/icons-material/Medication";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import PersonIcon from "@mui/icons-material/Person";
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -61,15 +61,14 @@ function ResponsiveDrawer({ Inp }) {
       <Divider />
 
       <List>
-        {["Dashboard", "Doctors", "Patients", "Reports"].map((text, index) => (
+        {["Dashboard", "Doctors", "Patients"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index === 0 ? <DashboardIcon /> : <></>}
                 {index === 1 ? <MedicationIcon /> : <></>}
                 {index === 2 ? <VaccinesIcon /> : <></>}
-                {index === 3 ? <SummarizeIcon /> : <></>}
-                {index === 4 ? <SummarizeIcon /> : <></>}
+                {/* {index === 3 ? <SummarizeIcon /> : <></>} */}
               </ListItemIcon>
               {index === 0 ? (
                 <ListItemText
@@ -85,7 +84,7 @@ function ResponsiveDrawer({ Inp }) {
                 <ListItemText
                   primary={text}
                   onClick={() => {
-                    navigate("/users");
+                    navigate("/doctors");
                   }}
                 />
               ) : (
@@ -120,20 +119,20 @@ function ResponsiveDrawer({ Inp }) {
       <Divider />
 
       <List>
-        {["Logout", "Create New Admin", "Settings"].map((text, index) => (
+        {["Settings", "Create New Admin", "Logout"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index === 0 ? <SettingsIcon /> : <></>}
-                {index === 1 ? <SettingsIcon /> : <></>}
-                {index === 2 ? <SettingsIcon /> : <></>}
+                {index === 1 ? <AddCircleOutlineIcon /> : <></>}
+                {index === 2 ? <LogoutIcon /> : <></>}
               </ListItemIcon>
               
                {index === 0 ? (
                 <ListItemText
                   primary={text}
                   onClick={() => {
-                    navigate("/logout");
+                    navigate("/settings");
                   }}
                 />
               ) : (
@@ -143,7 +142,7 @@ function ResponsiveDrawer({ Inp }) {
                 <ListItemText
                   primary={text}
                   onClick={() => {
-                    navigate("/signup");
+                    navigate("/createAdmin");
                   }}
                 />
               ) : (
@@ -202,7 +201,7 @@ function ResponsiveDrawer({ Inp }) {
               sx={{ marginRight: "20px", marginTop: "3px" }}
               component="div"
             >
-              {user.username}
+              Welcome {user.username}
             </Typography>
             <Avatar sx={{ bgcolor: blue[500] }}>
               <PersonIcon />
