@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 
-// pages & components
-// import Users from "./pages/Users/Users";
+// Pages & components
 import Drawer from "./pages/Drawer/Drawer";
 import ViewDoctors from "./pages/ViewDoctors/ViewDoctors";
 import ViewPatients from "./pages/ViewPatients/ViewPatients"

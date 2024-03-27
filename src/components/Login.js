@@ -39,6 +39,7 @@ const Login = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign In
+          
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -72,9 +73,18 @@ const Login = () => {
           >
             Sign Up
           </Button>
+
+          {error && (
+            <Typography variant="body2" color="error">
+              {error.response.data.error}
+              {console.log(error.response.data.error)}
+            </Typography>
+          )}
         </Box>
       </Box>
-      {error && <div className="error">{error}</div>}
+
+
+      
     </Container>
   );
 };

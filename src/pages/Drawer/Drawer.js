@@ -38,6 +38,9 @@ function ResponsiveDrawer({ Inp }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
+
+
+
   const navigate = useNavigate();
 
   const handleDrawerClose = () => {
@@ -119,16 +122,16 @@ function ResponsiveDrawer({ Inp }) {
       <Divider />
 
       <List>
-        {["Settings", "Create New Admin", "Logout"].map((text, index) => (
+        {["Create New Admin", "Logout"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index === 0 ? <SettingsIcon /> : <></>}
-                {index === 1 ? <AddCircleOutlineIcon /> : <></>}
-                {index === 2 ? <LogoutIcon /> : <></>}
+                {/* {index === 0 ? <SettingsIcon /> : <></>} */}
+                {index === 0 ? <AddCircleOutlineIcon /> : <></>}
+                {index === 1 ? <LogoutIcon /> : <></>}
               </ListItemIcon>
               
-               {index === 0 ? (
+               {/* {index === 0 ? (
                 <ListItemText
                   primary={text}
                   onClick={() => {
@@ -137,8 +140,8 @@ function ResponsiveDrawer({ Inp }) {
                 />
               ) : (
                 <></>
-              )}
-              {index === 1 ? (
+              )} */}
+              {index === 0 ? (
                 <ListItemText
                   primary={text}
                   onClick={() => {
@@ -148,7 +151,7 @@ function ResponsiveDrawer({ Inp }) {
               ) : (
                 <></>
               )}
-              {index === 2 ? (
+              {index === 1 ? (
                 <ListItemText
                   primary={text}
                   onClick={() => {
@@ -214,14 +217,13 @@ function ResponsiveDrawer({ Inp }) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true, 
           }}
           sx={{
             display: { xs: "block", sm: "none" },

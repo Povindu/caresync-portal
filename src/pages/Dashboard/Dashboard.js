@@ -2,12 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import Card from "../../components/DashboardCard/Card";
 import "./Dashboard.css";
-
 import axios from "axios";
 
 import { baseUrl } from "../../constants/constants";
-
 import api from "../../services/AuthService";
+import back from "../../assets/DashboardBack.jpg";
 
 export default function Dashboard() {
   const [doc, setDoc] = useState();
@@ -56,6 +55,9 @@ export default function Dashboard() {
           type={"Patients"}
           count={patient != null ? patient.length : "0"}
         />
+        <div className="right">
+          <img src={back} className='backImg'/>
+        </div>
       </div>
     </div>
   );

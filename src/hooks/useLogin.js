@@ -24,6 +24,7 @@ export const useLogin = () => {
       return res;
     } catch (error) {
       setIsLoading(false);
+      setError(error);
       console.log("error " + error);
     }
   };

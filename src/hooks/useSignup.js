@@ -12,48 +12,41 @@ export const useSignup = () => {
 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const { dispatch } = useAuthContext();
-
-  const SignupFunc = async (name, email, pass) => {
-    axios
-      .post(`${baseUrl}/portal/auth/signup`, {
-        name: name,
-        email: email,
-        password: pass,
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        setError(error.response.data.error)
-        console.log(error.response.data.error);
-        return error.response.data.error;
-      });
-  };
+  // const { dispatch } = useAuthContext();
 
   const signup = async (name, email, password) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await SignupFunc(name, email, password);
-    console.log(response);
+    axios
+      .post(`${baseUrl}/portal/auth/signup`, {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        if (res) {
+          if (!res.status == 200) {
+            setIsLoading(false);
+            setError(res.error);
+          }
+          if (res.status == 200) {
+            alert("Admin Account Creation Complete!");
 
-    if (response) {
-      if (!response.status == 200) {
+            navigate("/");
+
+            // update loading state
+            setIsLoading(false);
+          }
+        }
+        return res;
+      })
+      .catch((error) => {
         setIsLoading(false);
-        setError(response.error);
-      }
-      if (response.status == 200) {
-        alert("Signup Complete!");
-
-        navigate("/login");
-
-        // update loading state
-        setIsLoading(false);
-      }
-    }
+        setError(error.response.data.error);
+        console.log(error.response.data.error);
+        return error.response.data.error;
+      });
   };
 
   return { signup, isLoading, error };

@@ -12,6 +12,10 @@ const Signup = () => {
     e.preventDefault();
 
     await signup(name, email, password);
+
+    if(error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -40,6 +44,7 @@ const Signup = () => {
 
       <button disabled={isLoading}>Sign up</button>
       {error && <div className="error">{error}</div>}
+      {error == 200 ? <div className="error"> "Okay"</div> : <></>}
     </form>
   );
 };
