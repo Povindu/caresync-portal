@@ -8,17 +8,24 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import axios from "axios";
 
 import { baseUrl } from "../../constants/constants";
+import api from "../../services/AuthService";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
+  { id: "firstName", label: "First Name", minWidth: 170 },
+  { id: "lastName", label: "Last Name", minWidth: 170 },
   // { id: "spec", label: "Specialization", minWidth: 100 },
   {
-    id: "patientID",
-    label: "Patient ID",
+    id: "nic",
+    label: "NIC Number",
     minWidth: 170,
     align: "left",
   },
@@ -36,12 +43,41 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [userData, setUserData] = React.useState();
-
+  const [open, setOpen] = React.useState(false);
+  const [deleteId, setDeleteId] = React.useState();
 
   React.useEffect(() => {
     setUserData();
     getUsers();
   }, []);
+
+
+  const handleClickOpen = (id) => {
+    setDeleteId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setDeleteId();
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log(deleteId);
+    api
+      .delete(`${baseUrl}/patients/${deleteId}`, {})
+      .then((res) => {
+        if (res) {
+          getUsers();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return error.response;
+      });
+
+    setOpen(false);
+  };
 
   const getUsers = async () => {
     try {
@@ -124,17 +160,44 @@ export default function StickyHeadTable() {
                                 </Button>
                               ))}
 
-                            {column.id === "delBtn" && (
-                              <Button
-                                onClick={() => {
-                                  handleApprove(row.name);
-                                }}
-                                variant="outlined"
-                                color="error"
-                                size="small"
-                              >
-                                Delete
-                              </Button>
+{column.id === "delBtn" && (
+                              <>
+                                <Button
+                                  variant="outlined"
+                                  onClick={() => handleClickOpen(row._id)}
+                                  color="error"
+                                >
+                                  Delete
+                                </Button>
+                                <Dialog
+                                  open={open}
+                                  onClose={() => handleClose}
+                                  aria-labelledby="alert-dialog-title"
+                                  aria-describedby="alert-dialog-description"
+                                >
+                                  <DialogTitle id="alert-dialog-title">
+                                    {"Are you sure?"}
+                                  </DialogTitle>
+                                  <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                      This action cannot be undone. This will
+                                      permanently delete the doctor from the
+                                      database.
+                                    </DialogContentText>
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button
+                                      color="error"
+                                      onClick={() => handleDelete()}
+                                    >
+                                      Delete
+                                    </Button>
+                                    <Button onClick={handleClose} autoFocus>
+                                      Cancel
+                                    </Button>
+                                  </DialogActions>
+                                </Dialog>
+                              </>
                             )}
                             {column.id !== "ApproveBtn" &&
                               column.id !== "delBtn" &&

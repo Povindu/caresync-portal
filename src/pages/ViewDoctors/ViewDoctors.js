@@ -8,22 +8,23 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import formatDistance from "date-fns/formatDistance";
-import { format, isDate } from "date-fns";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 import axios from "axios";
+import api from "../../services/AuthService";
 
 import { baseUrl } from "../../constants/constants";
 
-
-
-
 const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
-  { id: "spec", label: "Specialization", minWidth: 100 },
+  { id: "firstName", label: "First Name", minWidth: 170 },
+  { id: "lastName", label: "Last Name", minWidth: 170 },
+  { id: "specialization", label: "Specialization", minWidth: 100 },
   {
-    id: "doctorID",
+    id: "medicalId",
     label: "Doctor ID",
     minWidth: 170,
     align: "left",
@@ -36,22 +37,44 @@ const columns = [
   },
   { id: "ApproveBtn", label: "Apporve", minWidth: 100 },
   { id: "delBtn", label: "Remove", minWidth: 100 },
-  // {
-  //     id: "density",
-  //     label: "Density",
-  //     minWidth: 170,
-  //     align: "right",
-  //     format: (value) => value.toFixed(2),
-  // },
 ];
 
 export default function StickyHeadTable() {
+  const [open, setOpen] = React.useState(false);
+  const [deleteId, setDeleteId] = React.useState();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [userData, setUserData] = React.useState();
 
+  const handleClickOpen = (id) => {
+    setDeleteId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setDeleteId();
+    setOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log(deleteId);
+    api
+      .delete(`${baseUrl}/doctors/${deleteId}`, {})
+      .then((res) => {
+        if (res) {
+          getUsers();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return error.response;
+      });
+
+    setOpen(false);
+  };
+
   React.useEffect(() => {
-    setUserData();
+    // setUserData();
     getUsers();
   }, []);
 
@@ -71,8 +94,19 @@ export default function StickyHeadTable() {
     }
   };
 
-  const handleApprove = (row) => {
-    alert(row);
+  const handleApprove = (id) => {
+    console.log(`${baseUrl}/doctors/verifyDoctor/${id}`);
+    api
+      .patch(`${baseUrl}/doctors/verifyDoctor/${id}`, {})
+      .then((res) => {
+        if (res) {
+          getUsers();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return error.response;
+      });
   };
 
   const handleChangePage = (event, newPage) => {
@@ -112,17 +146,11 @@ export default function StickyHeadTable() {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {/* {formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })} */}
-                            {/* {column.id === "createdAt" && 
-                            formatDistanceToNow(new Date(row.createdAt), { addSuffix: true })} */}
-                            {/* {column.id === "createdAt" && (
-                              <p>{formatDate(row.createdAt)}</p>
-                            )} */}
                             {column.id === "ApproveBtn" &&
                               (!row.medicalIdVerify ? (
                                 <Button
                                   onClick={() => {
-                                    handleApprove(row.name);
+                                    handleApprove(row._id);
                                   }}
                                   variant="outlined"
                                   size="small"
@@ -130,33 +158,52 @@ export default function StickyHeadTable() {
                                   Approve
                                 </Button>
                               ) : (
-                                <Button
-                                  disabled
-                                  onClick={() => {
-                                    handleApprove(row.name);
-                                  }}
-                                  variant="text"
-                                  size="small"
-                                >
+                                <Button disabled variant="text" size="small">
                                   Approved
                                 </Button>
                               ))}
 
                             {column.id === "delBtn" && (
-                              <Button
-                                onClick={() => {
-                                  handleApprove(row.name);
-                                }}
-                                variant="outlined"
-                                color="error"
-                                size="small"
-                              >
-                                Delete
-                              </Button>
+                              <>
+                                <Button
+                                  variant="outlined"
+                                  onClick={() => handleClickOpen(row._id)}
+                                  color="error"
+                                >
+                                  Delete
+                                </Button>
+                                <Dialog
+                                  open={open}
+                                  onClose={() => handleClose}
+                                  aria-labelledby="alert-dialog-title"
+                                  aria-describedby="alert-dialog-description"
+                                >
+                                  <DialogTitle id="alert-dialog-title">
+                                    {"Are you sure?"}
+                                  </DialogTitle>
+                                  <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                      This action cannot be undone. This will
+                                      permanently delete the doctor from the
+                                      database.
+                                    </DialogContentText>
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button
+                                      color="error"
+                                      onClick={() => handleDelete()}
+                                    >
+                                      Delete
+                                    </Button>
+                                    <Button onClick={handleClose} autoFocus>
+                                      Cancel
+                                    </Button>
+                                  </DialogActions>
+                                </Dialog>
+                              </>
                             )}
                             {column.id !== "ApproveBtn" &&
                               column.id !== "delBtn" &&
-                              // column.id !== "createdAt" &&
                               value}
                           </TableCell>
                         );

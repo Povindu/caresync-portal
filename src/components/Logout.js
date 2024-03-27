@@ -23,7 +23,7 @@ export default function Logout() {
         }}
       >
         <CssBaseline />
-        <WarningIcon fontSize="large" color='error' />
+        <WarningIcon fontSize="large" color="error" />
         <Typography variant="h5" sx={{ marginTop: 2 }}>
           Confirm Logout?
         </Typography>
