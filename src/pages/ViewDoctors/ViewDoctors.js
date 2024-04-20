@@ -14,7 +14,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import axios from "axios";
 import api from "../../services/AuthService";
 
 import { baseUrl } from "../../constants/constants";
@@ -23,6 +22,8 @@ const columns = [
   { id: "firstName", label: "First Name", minWidth: 170 },
   { id: "lastName", label: "Last Name", minWidth: 170 },
   { id: "specialization", label: "Specialization", minWidth: 100 },
+  { id: "email", label: "Email", minWidth: 100 },
+
   {
     id: "medicalId",
     label: "Doctor ID",
@@ -57,7 +58,7 @@ export default function StickyHeadTable() {
   };
 
   const handleDelete = () => {
-    console.log(deleteId);
+    console.log("DeleteID", deleteId);
     api
       .delete(`${baseUrl}/doctors/${deleteId}`, {})
       .then((res) => {
@@ -78,20 +79,16 @@ export default function StickyHeadTable() {
     getUsers();
   }, []);
 
-  const getUsers = async () => {
-    try {
-      const configurationObject = {
-        method: "get",
-        url: `${baseUrl}/doctors`,
-      };
-      console.log(configurationObject.url);
-
-      const response = await axios(configurationObject);
-      console.log(response.data);
-      setUserData(response.data);
-    } catch (error) {
-      console.log("error " + error);
-    }
+  const getUsers = () => {
+    api
+      .get(`${baseUrl}/doctors`, {})
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+      })
+      .catch((err) => {
+        console.log("error " + err);
+      });
   };
 
   const handleApprove = (id) => {

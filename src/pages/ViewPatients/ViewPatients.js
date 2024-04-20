@@ -14,14 +14,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import axios from "axios";
-
 import { baseUrl } from "../../constants/constants";
 import api from "../../services/AuthService";
 
 const columns = [
   { id: "firstName", label: "First Name", minWidth: 170 },
   { id: "lastName", label: "Last Name", minWidth: 170 },
+  { id: "email", label: "Email", minWidth: 100 },
   // { id: "spec", label: "Specialization", minWidth: 100 },
   {
     id: "nic",
@@ -51,7 +50,6 @@ export default function StickyHeadTable() {
     getUsers();
   }, []);
 
-
   const handleClickOpen = (id) => {
     setDeleteId(id);
     setOpen(true);
@@ -79,20 +77,16 @@ export default function StickyHeadTable() {
     setOpen(false);
   };
 
-  const getUsers = async () => {
-    try {
-      const configurationObject = {
-        method: "get",
-        url: `${baseUrl}/patients`,
-      };
-      console.log(configurationObject.url);
-
-      const response = await axios(configurationObject);
-      console.log(response.data);
-      setUserData(response.data);
-    } catch (error) {
-      console.log("error " + error);
-    }
+  const getUsers = () => {
+    api
+      .get(`${baseUrl}/patients`, {})
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+      })
+      .catch((err) => {
+        console.log("error " + err);
+      });
   };
 
   const handleApprove = (row) => {
@@ -160,7 +154,7 @@ export default function StickyHeadTable() {
                                 </Button>
                               ))}
 
-{column.id === "delBtn" && (
+                            {column.id === "delBtn" && (
                               <>
                                 <Button
                                   variant="outlined"
@@ -201,7 +195,6 @@ export default function StickyHeadTable() {
                             )}
                             {column.id !== "ApproveBtn" &&
                               column.id !== "delBtn" &&
-                              // column.id !== "createdAt" &&
                               value}
                           </TableCell>
                         );
