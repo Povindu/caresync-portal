@@ -204,7 +204,7 @@ function ResponsiveDrawer({ Inp }) {
               sx={{ marginRight: "20px", marginTop: "3px" }}
               component="div"
             >
-              Welcome {user.username}
+              Welcome {user.fName}
             </Typography>
             <Avatar sx={{ bgcolor: blue[500] }}>
               <PersonIcon />

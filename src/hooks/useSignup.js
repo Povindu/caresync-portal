@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useAuthContext } from "./useAuthContext";
-import axios from "axios";
+import api from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,15 +11,15 @@ export const useSignup = () => {
 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  // const { dispatch } = useAuthContext();
 
-  const signup = async (name, email, password) => {
+  const signup = async (fname, lname, email, password) => {
     setIsLoading(true);
     setError(null);
-
-    axios
+    console.log(fname, lname, email, password);
+    api
       .post(`${baseUrl}/portal/auth/signup`, {
-        name: name,
+        firstName: fname,
+        lastName: lname,
         email: email,
         password: password,
       })

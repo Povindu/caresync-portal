@@ -27,7 +27,7 @@ export default function SignUp() {
     const password =  data.get('password')
 
     console.log(fName,lName,email,password)
-    await signup(fName, email, password);
+    await signup(fName, lName, email, password);
   };
 
   return (

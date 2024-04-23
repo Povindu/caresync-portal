@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useState } from "react";
+import { createContext, useReducer, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
@@ -15,17 +15,24 @@ export const authReducer = (state, action) => {
 };
 
 export const AuthContextProvider = ({ children }) => {
-
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
   });
 
-  useEffect( () => {
+  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      const JWTData = jwtDecode(user.token);
+      JWTData.token = user.token;
 
-    if (user) {
-      const JWT = jwtDecode(user.token);
-      dispatch({ type: "LOGIN", payload: JWT });
+      if (user.refreshToken) {
+        JWTData.refreshToken = user.refreshToken;
+      }
+
+      console.log("JWT:", JWTData);
+      dispatch({ type: "LOGIN", payload: JWTData });
+    } else {
+      dispatch({ type: "LOGOUT" });
     }
   }, []);
 

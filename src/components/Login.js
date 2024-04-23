@@ -11,16 +11,26 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+
+  const navigate = useNavigate();
   const { login, error, isLoading } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await new FormData(e.currentTarget);
+    console.log("Data",data)
+    // if(!data) {
+    //   console.log("error")
+    //   return;
+    // }
     const tempEmail = data.get("email");
     const tempPassword = data.get("password");
     console.log(tempEmail, tempPassword);
     await login(tempEmail, tempPassword);
+    navigate("/");
   };
 
   return (
@@ -76,8 +86,8 @@ const Login = () => {
 
           {error && (
             <Typography variant="body2" color="error">
-              {error.response.data.error}
-              {console.log(error.response.data.error)}
+              {error.response?.data.error}
+              {console.log(error.response)}
             </Typography>
           )}
         </Box>
