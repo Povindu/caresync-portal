@@ -1,9 +1,10 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { refreshAT } from "./RefreshAT";
+import { baseUrl } from "../constants/constants";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: baseUrl,
 });
 
 const checkATValidity = async (token, user) => {

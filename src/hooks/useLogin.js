@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import api from "../services/AuthService"; // Import the AuthService
-
-const baseUrl = "http://localhost:4000/api";
+import { baseUrl } from "../constants/constants";
+import { jwtDecode } from "jwt-decode";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
@@ -16,12 +16,8 @@ export const useLogin = () => {
     LoginFunc(email, password);
   };
 
-
-
-
-
   const LoginFunc = (email, pass) => {
-    console.log(email,pass)
+    console.log(email, pass);
     api
       .post(`${baseUrl}/portal/auth/signin`, {
         email: email,
@@ -49,10 +45,18 @@ export const useLogin = () => {
       if (response.status == 200) {
         // save the user to local storage
         localStorage.setItem("user", JSON.stringify(response.data));
-        console.log(JSON.parse(localStorage.getItem("user")));
+        // console.log(JSON.parse(localStorage.getItem("user")));
 
-        // update the auth context
-        dispatch({ type: "LOGIN", payload: response });
+        const user = JSON.parse(localStorage.getItem("user"));
+        const JWTData = jwtDecode(user.token);
+        JWTData.token = user.token;
+
+        if (user.refreshToken) {
+          JWTData.refreshToken = user.refreshToken;
+        }
+
+        // console.log("JWT:", JWTData);
+        dispatch({ type: "LOGIN", payload: JWTData });
 
         // update loading state
         setIsLoading(false);

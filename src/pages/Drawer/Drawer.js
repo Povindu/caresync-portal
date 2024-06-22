@@ -15,8 +15,8 @@ import MedicationIcon from "@mui/icons-material/Medication";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import PersonIcon from "@mui/icons-material/Person";
-import LogoutIcon from '@mui/icons-material/Logout';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import LogoutIcon from "@mui/icons-material/Logout";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -34,14 +34,39 @@ const drawerWidth = 240;
 
 function ResponsiveDrawer({ Inp }) {
   const { user } = useAuthContext();
+  const [userName, setUserName] = React.useState();
   console.log(user);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
+  const [timeLeft, setTimeLeft] = React.useState(60);
 
+  // React.useEffect(() => {
+  //   // exit early when we reach 0
+  //   if (!timeLeft) return;
 
+  //   console.log(user)
+  //   console.log(userName);
+  //   if (userName == null || undefined) {
+  //     setUserName(user.fName);
+  //   } else {
+  //     setTimeLeft(0);
+  //   }
+
+  //   const intervalId = setInterval(() => {
+  //     setTimeLeft(timeLeft - 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(intervalId);
+  // }, [timeLeft]);
 
   const navigate = useNavigate();
+
+  console.log(userName);
+
+  React.useEffect(() => {
+    setUserName(user.fName);
+  }, [user]);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -113,7 +138,6 @@ function ResponsiveDrawer({ Inp }) {
               ) : (
                 <></>
               )}
-             
             </ListItemButton>
           </ListItem>
         ))}
@@ -130,8 +154,8 @@ function ResponsiveDrawer({ Inp }) {
                 {index === 0 ? <AddCircleOutlineIcon /> : <></>}
                 {index === 1 ? <LogoutIcon /> : <></>}
               </ListItemIcon>
-              
-               {/* {index === 0 ? (
+
+              {/* {index === 0 ? (
                 <ListItemText
                   primary={text}
                   onClick={() => {
@@ -204,7 +228,7 @@ function ResponsiveDrawer({ Inp }) {
               sx={{ marginRight: "20px", marginTop: "3px" }}
               component="div"
             >
-              Welcome {user.fName}
+              Welcome {userName}
             </Typography>
             <Avatar sx={{ bgcolor: blue[500] }}>
               <PersonIcon />
@@ -223,7 +247,7 @@ function ResponsiveDrawer({ Inp }) {
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, 
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

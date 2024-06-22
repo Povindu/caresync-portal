@@ -6,11 +6,16 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { baseUrl } from "../../constants/constants";
 import api from "../../services/AuthService";
 import back from "../../assets/DashboardBack.jpg";
+import DoctorIcon from "../../assets/doctorIcon.png";
+import UserIcon from "../../assets/userIcon.png";
+
 
 export default function Dashboard() {
   const { user } = useAuthContext();
   const [doc, setDoc] = useState();
   const [patient, setPatient] = useState();
+
+  console.log(baseUrl);
 
   const getUsers = async (userType) => {
     api
@@ -48,12 +53,14 @@ export default function Dashboard() {
       <div className="CardContainer">
         <Card
           className="card"
-          type={"Doctors"}
+          type={"Registerd Doctors:"}
           count={doc != null ? doc.length : "0"}
+          imgSrc={DoctorIcon}
         />
         <Card
           className="card"
-          type={"Patients"}
+          type={"Registerd Patients:"}
+          imgSrc={UserIcon}
           count={patient != null ? patient.length : "0"}
         />
         <div className="right">

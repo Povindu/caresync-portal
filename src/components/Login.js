@@ -14,14 +14,13 @@ import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-
   const navigate = useNavigate();
   const { login, error, isLoading } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await new FormData(e.currentTarget);
-    console.log("Data",data)
+    console.log("Data", data);
     // if(!data) {
     //   console.log("error")
     //   return;
@@ -49,7 +48,6 @@ const Login = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign In
-          
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -92,9 +90,6 @@ const Login = () => {
           )}
         </Box>
       </Box>
-
-
-      
     </Container>
   );
 };

@@ -13,7 +13,7 @@ const Signup = () => {
 
     await signup(name, email, password);
 
-    if(error) {
+    if (error) {
       console.log(error);
     }
   };

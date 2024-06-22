@@ -3,8 +3,7 @@ import api from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const baseUrl = "http://localhost:4000/api";
+import { baseUrl } from "../constants/constants";
 
 export const useSignup = () => {
   const navigate = useNavigate();
@@ -42,9 +41,10 @@ export const useSignup = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError(error.response.data.error);
-        console.log(error.response.data.error);
-        return error.response.data.error;
+        console.log(error);
+        setError(error.response?.data?.error);
+        console.log(error.response?.data?.error);
+        return error.response.error;
       });
   };
 
