@@ -1,14 +1,15 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import Card from "../../components/DashboardCard/Card";
 import "./Dashboard.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { baseUrl } from "../../constants/constants";
 import api from "../../services/AuthService";
-import back from "../../assets/DashboardBack.jpg";
 import DoctorIcon from "../../assets/doctorIcon.png";
 import UserIcon from "../../assets/userIcon.png";
-
+import Paper from '@mui/material/Paper';
+import PieChart from "../../components/DashboardCard/PieChart";
+import Typography from "@mui/material/Typography";
+import { MdOutlineHealthAndSafety } from "react-icons/md";
 
 export default function Dashboard() {
   const { user } = useAuthContext();
@@ -50,22 +51,59 @@ export default function Dashboard() {
 
   return (
     <div>
+      <Typography
+        variant="h6"
+        sx={{ marginTop: "10px", marginBottom:"40px"}}
+        className="poppins-regular">
+        Hi! Welcome to CareSync Dashboard
+      </Typography>
       <div className="CardContainer">
-        <Card
-          className="card"
-          type={"Registerd Doctors:"}
-          count={doc != null ? doc.length : "0"}
-          imgSrc={DoctorIcon}
-        />
-        <Card
-          className="card"
-          type={"Registerd Patients:"}
-          imgSrc={UserIcon}
-          count={patient != null ? patient.length : "0"}
-        />
-        <div className="right">
-          {/* <img src={back} className="backImg" /> */}
-        </div>
+        <Paper elevation={1} sx={{ width: "300px", height: "200px" }}>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", marginTop: "10px" }}
+            component="div"
+          >
+            PATIENTS
+          </Typography>
+          <Typography
+            variant="h1"
+            sx={{ textAlign: "center", marginTop: "10px" }}
+            component="div"
+          >
+
+            {patient != null ? patient.length : "0"}
+          </Typography>
+        </Paper>
+        <Paper elevation={1} sx={{ width: "300px", height: "200px" }}>
+
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", marginTop: "10px" }}
+          >
+            DOCTORS
+          </Typography>
+          <Typography
+            variant="h1"
+            sx={{ textAlign: "center", marginTop: "10px" }}
+          >
+
+            {doc != null ? doc.length : "0"}
+          </Typography>
+        </Paper>
+      </div>
+      <div className="">
+        <Paper elevation={1} sx={{ width: "500px", height: "300px", paddingTop: "20px", marginTop: "50px" }}>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "center", marginTop: "10px", marginBottom: "10px" }}
+            component="div"
+          >
+            USER STATISTICS
+          </Typography>
+          <PieChart data={{ d: doc?.length ? doc.length : "0", p: patient?.length ? patient.length : "0" }} />
+        </Paper>
+
       </div>
     </div>
   );
